@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Configurações inciais -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão Hoteleira - Gerenciamento de Acomodações</title>
+    <link rel="icon" href="assets/imagens/favicon.png" type="image/png">
+
+    <!-- Integrações internas -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="js/script.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/acomodacoes.css">
+    <script src="js/acomodacoes.js"></script>
+
+    <!-- Integrações externos -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div id="loading">
+        <img src="assets/imagens/loading.svg" alt="Carregando">
+    </div>
+
+    <div class="geral">
+        <div class="topo">
+            <div class="conteudo">
+                <a href="index.html">
+                    <span class="material-symbols-outlined icon-topo">Home</span>
+                </a>
+                <a href="index.html" class="link-logo">
+                    <img src="assets/imagens/logo-branco.png" alt="Logotipo" class="logo-topo">
+                </a>
+                <a href="index.html">
+                    <span class="material-symbols-outlined icon-topo">Menu</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="meio">
+            <div class="conteudo modulo">
+                <h1>Gerenciamento de Acomodações</h1>
+
+                <form>
+                    <input type="hidden" id="campo-id">
+                    <div class="item-form">
+                        <label for="campo-nome">Nome:</label>
+                        <input type="text" id="campo-nome" placeholder="Digite">
+                    </div>
+                    <div class="item-form">
+                        <label for="campo-valor-diaria">Valor da diária:</label>
+                        <input type="text" id="campo-valor-diaria" placeholder="Digite">
+                    </div>
+                    <div class="item-form">
+                        <label for="campo-limite-hospedes">Limite de hóspedes:</label>
+                        <input type="number" min="0" id="campo-limite-hospedes" placeholder="Digite">
+                    </div>
+                    <div class="item-form">
+                        <label for="campo-descricao">Descrição:</label>
+                        <input type="text" id="campo-descricao" placeholder="Digite">
+                    </div>
+
+
+                    <h2>Mídias</h2>
+                    <div class="item-nome">
+                        <label for="campo-nome-arquivo">Foto / Vídeo:</label>
+                        <p id="nome-arquivo-atual"></p>
+                        <input type="file" id="campo-nome-arquivo">
+                        
+                    </div>
+
+                    <div class="item-form item-check">
+                        <strong>Tipo de mídia</strong>
+                        <div class="opcoes">
+                            <div>
+                                <input type="radio" id="campo-tipo-midia-op-01" name="campo-midia", value="imagem">
+                                <label for="campo-tipo-midia-op-01">Imagem</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="campo-tipo-midia-op-02" name="campo-midia", value="video">
+                                <label for="campo-tipo-midia-op-02">Vídeo</label>
+                            </div>
+                        </div>
+                    </div>
+    
+
+                    <div class="botoes">
+                        <button type="button" id="bt-salvar">Salvar</button>
+                        <button type="reset" id="bt-limpar">Limpar</button>
+                        <button type="button" id="bt-cancelar">Cancelar</button>
+                    </div>
+                </form>
+
+                <div class="conteudo-tabela">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Valor da diaria</th>
+                                <th>Limite de hospedes</th>
+                                <th>Descrição</th>
+                                <th>Nome arquivo</th>
+                                <th>Tipo de midia</th>
+                                <th class="col-acoes"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3"><span id="total-registros">0</span> registros encontrados</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="rodape">
+            <div class="conteudo">
+                <p>© Protótipo de Aplicação para Gestão Hoteleira</p>
+                <p>Todos os direitos reservados</p>
+            </div>
+        </div>                
+    </div>
+</body>
+</html>
