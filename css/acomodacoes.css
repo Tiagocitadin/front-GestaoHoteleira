@@ -1,1 +1,14 @@
 /* Estilo relacionado ao módulo de gerenciamento de acomodações */
+
+h2 {
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+hr {
+    margin-top: 20px;
+    border-color: #0000004a;
+    border-width: 1px;
+    border-style: solid; 
+}
+

@@ -23,10 +23,14 @@ document.addEventListener('DOMContentLoaded', function() {
         let valor_diaria = document.querySelector('#campo-valor-diaria')?.value;
         let limite_hospedes = document.querySelector('#campo-limite-hospedes')?.value;
         let descricao = document.querySelector('#campo-descricao')?.value;
-        let nome_arquivo = document.querySelector('#campo-nome-arquivo')?.value;
-        let campo_tipo_midia = document.querySelector('[name="campo-midia"]:checked')?.value;
 
 
+        // Trata os nomes de arquivo (considerando múltiplos arquivos)
+        let nome_arquivo = Array.from(document.querySelector('#campo-nome-arquivo').files).map(file => file.name).join(',');
+
+
+        // Ele joga para uma função que trata o tipo de midia
+        let campo_tipo_midia = determinarTipoMidia(nome_arquivo);
 
 
         // Armazena a lista atualizada no navegador
@@ -36,10 +40,6 @@ document.addEventListener('DOMContentLoaded', function() {
             alert("Valor da diária obrigatória!");
         } else if (limite_hospedes == null ||limite_hospedes.trim() === "") {
             alert("Limite de hóspedes obrigatório!");
-        } else if (nome_arquivo == null || nome_arquivo.trim() === "") {
-            alert("Escolha de arquivo obrigatória!");
-        } else if (campo_tipo_midia == null || campo_tipo_midia.trim() === "") {
-            alert("Tipo de midia é obrigatório!");
         } else {
             if(id != "") { 
                 let indice = getIndiceListaPorId(id)
@@ -104,7 +104,16 @@ function listar() {
         htmlColunas += "<td>"+objeto.valor_diaria+"</td>";
         htmlColunas += "<td>"+objeto.limite_hospedes+"</td>";
         htmlColunas += "<td>"+objeto.descricao+"</td>";
-        htmlColunas += "<td>"+objeto.nome_arquivo+"</td>";
+
+        // Exibir os nomes de arquivo em uma única célula
+        let arquivos = objeto.nome_arquivo.split(',').map(arquivo => arquivo.trim());
+        htmlColunas += "<td>";
+        arquivos.forEach(function(arquivo) {
+            htmlColunas += arquivo + "<br>";
+        });
+        htmlColunas += "</td>";
+
+
         htmlColunas += "<td>"+objeto.campo_tipo_midia+"</td>";
         htmlColunas += "<td>"+htmlAcoes+"</td>";
         
@@ -112,7 +121,6 @@ function listar() {
         let htmlLinha = '<tr id="linha-'+objeto.id+'">'+htmlColunas+'</tr>';
         document.querySelector('table tbody').innerHTML += htmlLinha;
     });
-    radioButtons = document.querySelectorAll('[name="campo-midia"]'); // Inicialização de radioButtons
 
     eventosListagem();
     carregar();
@@ -131,24 +139,27 @@ function eventosListagem() {
             let limite_hospedes = colunas[3].textContent;
             let descricao = colunas[4].textContent;
             let nome_arquivo = colunas[5].textContent;
-            let campo_tipo_midia = colunas[6].textContent;
-            
-            
+    
             // Popula os campos do formulário
-            document.querySelector('#campo-id').value = id;
             document.querySelector('#campo-id').value = id;
             document.querySelector('#campo-nome').value = nome;
             document.querySelector('#campo-valor-diaria').value = valor_diaria;
             document.querySelector('#campo-limite-hospedes').value = limite_hospedes;
             document.querySelector('#campo-descricao').value = descricao;
             document.querySelector('#nome-arquivo-atual').textContent = nome_arquivo;
-
-            // Marcar ou desmarcar o radio conforme o valor em campo_tipo_midia
-            let radioButtons = document.querySelectorAll('[name="campo-midia"]');
-            radioButtons.forEach(button => button.checked = button.value === campo_tipo_midia);
-            
+    
             // Exibe botão de cancelar edição
             document.querySelector('#bt-cancelar').style.display = 'flex';
+    
+            // Exibe os nomes de arquivo embaixo do p
+            let arquivoAtualP = document.querySelector('#nome-arquivo-atual');
+            arquivoAtualP.textContent = "";  // Limpa o conteúdo atual
+    
+            // Trata os nomes de arquivo (considerando múltiplos arquivos)
+            let arquivos = nome_arquivo.split(',').map(arquivo => arquivo.trim());
+            arquivos.forEach(function(arquivo) {
+                arquivoAtualP.innerHTML += arquivo + "<br>";
+            });
         });
     });
 
@@ -161,10 +172,10 @@ function eventosListagem() {
                 let id = linha.id.replace('linha-','');
                 let indice = getIndiceListaPorId(id);
                 listaAcomodacoes.splice(indice, 1);
-
+    
                 // Armazena a lista atualizada no navegador
                 localStorage.setItem('listaAcomodacoes', JSON.stringify(listaAcomodacoes));
-
+    
                 // Recarrega a listagem
                 listar();
             }
@@ -180,9 +191,26 @@ function limparCampos() {
         document.querySelector('#campo-limite-hospedes').value = ""; 
         document.querySelector('#campo-descricao').value = "";
         document.querySelector('#nome-arquivo-atual').textContent = "";
-        
         document.querySelector('#campo-nome-arquivo').value= "";
-        radioButtons.forEach(button => button.checked = false);
+}
+
+// Função para determinar o tipo de mídia com base no nome do arquivo
+function determinarTipoMidia(nome_arquivo) {
+    // Supondo que o nome do arquivo contenha a extensão do arquivo (por exemplo, "video.mp4" ou "imagem.jpg")
+    let extensao = nome_arquivo.split('.').pop().toLowerCase();
+
+    // Extensões permitidas para imagens e vídeos
+    let extensoesImagem = ['jpg', 'jpeg', 'png', 'gif'];
+    let extensoesVideo = ['mp4', 'mpeg', 'webm', 'ogg'];
+
+    // Determinar o tipo de mídia com base na extensão e nas extensões permitidas
+    if (extensoesImagem.includes(extensao)) {
+        return 'Imagem';
+    } else if (extensoesVideo.includes(extensao)) {
+        return 'Video';
+    } else {
+        return 'Desconhecido';
+    }
 }
 
 function getIndiceListaPorId(id) {
@@ -201,8 +229,4 @@ function getMaiorIdLista() {
     } else {
         return 0;
     }
-}
-
-function devModeLimparBanco() {
-    localStorage.removeItem('listaAcomodacoes');
 }
